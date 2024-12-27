@@ -240,14 +240,22 @@ def main():
         # Criar colunas para os botões de Exportar e Cancelar
         col1, col2 = st.columns([1, 5])
         with col1:
-            if st.button("Exportar"):
-                # Aqui você pode chamar a função de exportação
-                exportar_correios(st.session_state.token, [item[0] for item in ids_nomes_cursos_emitidos])  # Passar os IDs dos alunos
-                
-
+            # Chamar a função de exportação para obter o conteúdo CSV e o nome do arquivo
+            csv_data, file_name = exportar_correios(st.session_state.token, [item[0] for item in ids_nomes_cursos_emitidos])  # Passar os IDs dos alunos
+            
+            if csv_data:
+                # Criar o botão de download diretamente
+                st.download_button(
+                    label="EXPORTAR",
+                    data=csv_data,
+                    file_name=file_name,
+                    mime="text/csv"
+                )
+            else:
+                st.warning("Erro ao exportar dados. Verifique a resposta da API.")
                 
         with col2:
-            if st.button("Cancelar"):
+            if st.button("CANCELAR"):
                 st.session_state.envio_confirmado = False  # Voltar para a tela de filtros
                 st.rerun()  # Recarregar a tela para exibir novamente o filtro
                 
