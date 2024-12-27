@@ -102,29 +102,30 @@ def exportar_correios(token, ids):
         linhas = response.content.decode('utf-8').splitlines()
         
         if len(linhas) > 1:
-            # Verificar se a pasta 'EXPORTADOS' existe, caso contrário, criar
-            pasta_exportados = 'EXPORTADOS'
-            if not os.path.exists(pasta_exportados):
-                os.makedirs(pasta_exportados)  # Cria a pasta
-
-            # Caminho completo do arquivo
-            caminho_arquivo = os.path.join(pasta_exportados, f"CORREIOS_{data_hoje}.csv")
+            # Criar um arquivo CSV na memória
+            csv_buffer = io.StringIO()
             
-            # Ignorar a primeira linha e escrever o restante no arquivo
-            with open(caminho_arquivo, "wb") as f:
-                # Definir o cabeçalho
-                cabecalho = "SERVICO;DESTINATARIO;CEP;LOGRADOURO;NUMERO;COMPLEMENTO;BAIRRO;EMAIL;;;CPF/CNPJ;VALOR_DECLARADO;;TIPO_OBJETO;;;;;AR;MP;;;OBSERVACAO\n"
-                f.write(cabecalho.encode('utf-8'))
-                
-                # Escrever todas as linhas, ignorando a primeira
-                for linha in linhas[1:]:
-                    f.write(linha.encode('utf-8') + b"\n")
-        
-            st.success(f"Arquivo CSV exportado com sucesso para '{caminho_arquivo}'.")
+            # Definir o cabeçalho do arquivo CSV
+            cabecalho = "SERVICO;DESTINATARIO;CEP;LOGRADOURO;NUMERO;COMPLEMENTO;BAIRRO;EMAIL;;;CPF/CNPJ;VALOR_DECLARADO;;TIPO_OBJETO;;;;;AR;MP;;;OBSERVACAO\n"
+            csv_buffer.write(cabecalho)
+            
+            # Escrever as linhas do CSV
+            for linha in linhas[1:]:
+                csv_buffer.write(linha + "\n")
+            
+            # Criar o botão de download no Streamlit
+            st.download_button(
+                label="Baixar CSV de Correios",
+                data=csv_buffer.getvalue(),
+                file_name=f"CORREIOS_{data_hoje}.csv",
+                mime="text/csv"
+            )
+
+            st.success(f"Arquivo CSV gerado com sucesso! Clique no botão acima para baixar.")
         else:
-            print("Resposta da API não contém dados válidos.")
+            st.warning("Resposta da API não contém dados válidos.")
     else:
-        st.warning("Erro ao exportar correios:", response.status_code)
+        st.warning(f"Erro ao exportar correios: {response.status_code}")
 
 
 # Função principal que será chamada após o login
