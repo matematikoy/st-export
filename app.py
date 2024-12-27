@@ -2,6 +2,8 @@ import streamlit as st
 import requests
 import os
 from datetime import datetime
+import io
+
 
 # Função para obter o token de autorização e salvar em um arquivo
 def obter_token_autorizacao(usuario, senha):
