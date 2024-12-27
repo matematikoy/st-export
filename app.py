@@ -115,19 +115,14 @@ def exportar_correios(token, ids):
             for linha in linhas[1:]:
                 csv_buffer.write(linha + "\n")
             
-            # Criar o botão de download no Streamlit
-            st.download_button(
-                label="Baixar CSV de Correios",
-                data=csv_buffer.getvalue(),
-                file_name=f"CORREIOS_{data_hoje}.csv",
-                mime="text/csv"
-            )
+            # Retornar o conteúdo do CSV e o nome do arquivo
+            return csv_buffer.getvalue(), f"CORREIOS_{data_hoje}.csv"
 
-            st.success(f"Arquivo CSV gerado com sucesso! Clique no botão acima para baixar.")
         else:
-            st.warning("Resposta da API não contém dados válidos.")
+            return None, None
     else:
-        st.warning(f"Erro ao exportar correios: {response.status_code}")
+        return None, None
+
 
 
 # Função principal que será chamada após o login
