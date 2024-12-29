@@ -131,7 +131,7 @@ def main():
     if 'token' not in st.session_state:
         # Caso o token não esteja no session_state, mostra apenas a tela de login
         st.title("Login")
-        st.subheader("Digite suas credenciais")
+        st.subheader("Digite suas credenciais do Sistema Grupo HNe")
 
         # Limpar a tela, exibir apenas campos de login
         usuario = st.text_input("Usuário")
@@ -212,9 +212,6 @@ def main():
             # Obter os dados dos alunos armazenados no session_state
             ids_nomes_cursos_emitidos = st.session_state.get('ids_nomes_cursos_emitidos', [])
 
-            # Verifique o conteúdo da lista de alunos
-            #st.write(ids_nomes_cursos_emitidos)  # Adicione isso para verificar a lista
-
             # Definir o conteúdo HTML para a rolagem
             html_content = """
             <div style="max-height: 300px; overflow-y: auto; padding: 10px; border: 1px solid #ddd; margin-bottom: 10px;">
@@ -223,7 +220,6 @@ def main():
             # Adicionar os alunos ao conteúdo HTML com rolagem
             for item in ids_nomes_cursos_emitidos:
                 nome, curso = item[1], item[2]  # Desempacotar os dados de nome e curso
-                #st.write(f"Aluno: {nome} - Curso: {curso}")  # Exibição simples sem HTML
                 html_content += f"<p style='background-color: #d8d4dc; padding: 10px; border-radius: 5px; border: 1px solid #d8d4dc;'><b>Aluno:</b> {nome}<br><b>Curso:</b> {curso}</p>"
 
             # Fechar a tag <div> e adicionar ao Streamlit
@@ -235,19 +231,21 @@ def main():
         # Criar colunas para os botões de Exportar e Cancelar
         col1, col2 = st.columns([1, 5])
         with col1:
-            # Chamar a função de exportação para obter o conteúdo CSV e o nome do arquivo
-            csv_data, file_name = exportar_correios(st.session_state.token, [item[0] for item in ids_nomes_cursos_emitidos])  # Passar os IDs dos alunos
-            
-            if csv_data:
-                # Criar o botão de download diretamente
-                st.download_button(
-                    label="EXPORTAR",
-                    data=csv_data,
-                    file_name=file_name,
-                    mime="text/csv"
-                )
-            else:
-                st.warning("Erro ao exportar dados. Verifique a resposta da API.")
+            # Verificar se o botão "EXPORTAR" foi pressionado
+            if st.button("EXPORTAR"):
+                # Chamar a função de exportação para obter o conteúdo CSV e o nome do arquivo
+                csv_data, file_name = exportar_correios(st.session_state.token, [item[0] for item in ids_nomes_cursos_emitidos])  # Passar os IDs dos alunos
+
+                if csv_data:
+                    # Criar o botão de download diretamente
+                    st.download_button(
+                        label="Baixar Arquivo CSV",
+                        data=csv_data,
+                        file_name=file_name,
+                        mime="text/csv"
+                    )
+                else:
+                    st.warning("Erro ao exportar dados. Verifique a resposta da API.")
                 
         with col2:
             if st.button("CANCELAR"):
@@ -258,5 +256,3 @@ def main():
 # Rodar o aplicativo Streamlit
 if __name__ == "__main__":
     main()
-
-
