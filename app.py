@@ -205,7 +205,7 @@ def main():
     
     # Exibir o expander se o envio for confirmado
     if 'envio_confirmado' in st.session_state and st.session_state.envio_confirmado:
-        st.title("Detalhes dos Alunos a Serem Enviados")
+        st.title("Detalhes dos alunos a serem exportados")
 
         # Criar um expander com rolagem
         with st.expander("Lista de alunos a exportar", expanded=True):
@@ -239,7 +239,7 @@ def main():
                 if csv_data:
                     # Criar o botão de download diretamente
                     st.download_button(
-                        label="Baixar Arquivo CSV",
+                        label="BAIXAR AQUIVO CSV",
                         data=csv_data,
                         file_name=file_name,
                         mime="text/csv"
