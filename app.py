@@ -122,42 +122,12 @@ def exportar_correios(token, ids):
     else:
         return None, None
 
-# Função para criar a nav-bar
-def criar_navbar():
-    # Barra de navegação no topo
-    st.markdown("""
-        <style>
-            .navbar {
-                background-color: #4CAF50;
-                overflow: hidden;
-                position: fixed;
-                top: 0;
-                width: 100%;
-                padding: 10px 0;
-                z-index: 1000;
-            }
-            .navbar a {
-                color: white;
-                padding: 14px 20px;
-                text-align: center;
-                text-decoration: none;
-                font-size: 17px;
-                display: inline-block;
-            }
-            .navbar a:hover {
-                background-color: #45a049;
-            }
-        </style>
-    """, unsafe_allow_html=True)
 
-    # Barra de navegação com links (não há links definidos, é só para visual)
-    st.markdown('<div class="navbar">', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
 
 # Função principal que será chamada após o login
 def main():
 
-    criar_navbar()
+
 
     # Verificar se já existe um token no session_state
     if 'token' not in st.session_state:
