@@ -128,7 +128,6 @@ def exportar_correios(token, ids):
 def main():
 
 
-
     # Verificar se já existe um token no session_state
     if 'token' not in st.session_state:
 
@@ -220,7 +219,7 @@ def main():
         with col1:
 
             # Verificar se o botão "EXPORTAR" foi pressionado
-            if st.button("EXPORTAR"):
+            if st.button("CONFIRMAR"):
                 # Chamar a função de exportação para obter o conteúdo CSV e o nome do arquivo
                 csv_data, file_name = exportar_correios(st.session_state.token, [item[0] for item in ids_nomes_cursos_emitidos])  # Passar os IDs dos alunos
 
